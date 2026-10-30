@@ -1,0 +1,16 @@
+# only postgres for now, will add rabbitmq / minio / ollama later
+services:
+  postgres:
+    image: postgres:16
+    container_name: warden-postgres
+    environment:
+      POSTGRES_DB: warden
+      POSTGRES_USER: warden
+      POSTGRES_PASSWORD: warden
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

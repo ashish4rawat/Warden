@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: warden
+  datasource:
+    url: jdbc:postgresql://localhost:5432/warden
+    username: warden
+    password: warden
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: 8080

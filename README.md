@@ -38,3 +38,67 @@ Everything runs locally. No cloud account needed, no surprise bills.
 - React for the dashboard
 - Prometheus + Grafana
 - Docker Compose, plus k3d if you want to try Kubernetes execution
+
+## Roadmap
+
+This is the rough order I want to build things in. It'll probably change as I go, but the idea is to get a small version working properly first and then grow it.
+
+**v0.1 – the basics** (working on this now)
+- [x] Project setup, license
+- [x] DAG model with cycle + missing dependency checks
+- [ ] Java DSL for defining pipelines
+- [ ] Postgres schema for dags, runs and task states (with Flyway)
+- [ ] Simple cron scheduler
+- [ ] Local executor, running tasks on virtual threads
+- [ ] Retries, backoff, timeouts
+
+**v0.2 – data contracts**
+- [ ] Tasks declare which datasets they read and write
+- [ ] Contracts: schema, row count, nulls, uniqueness, freshness
+- [ ] Quarantine bad output and pause everything downstream
+- [ ] REST API for dags and runs
+
+**v0.3 – lineage and smart reruns**
+- [ ] Dataset level lineage graph
+- [ ] Rerun only the affected downstream tasks
+- [ ] Partition level lineage (this one is going to be hard)
+- [ ] YAML pipelines
+
+**v0.4 – dashboard**
+- [ ] React UI with DAG view, run history and logs
+- [ ] Lineage graph view
+- [ ] Quarantine screen to approve / reject batches
+
+**v0.5 – going distributed**
+- [ ] Workers over RabbitMQ
+- [ ] Heartbeats, and picking up tasks from workers that died
+- [ ] Scheduler failover (postgres advisory locks to start with)
+- [ ] Concurrency limits and pools
+- [ ] Logs and quarantined data in MinIO
+
+**v0.6 – AI diagnosis and monitoring**
+- [ ] Failure explanations with a local model through Ollama
+- [ ] Prometheus metrics + Grafana dashboards
+- [ ] Alerts on contract violations and missed freshness
+
+**Later, maybe**
+- Kubernetes executor (k3d locally)
+- RBAC / multiple teams
+- Kafka as an option instead of RabbitMQ
+- Backfills from the UI
+
+## Running it locally
+
+You need Java 21, Maven and Docker.
+
+```bash
+docker compose up -d      # starts postgres
+mvn test                  # run the tests
+mvn spring-boot:run       # starts warden on localhost:8080
+```
+
+Not much to see yet, it's very early. Mostly the DAG model and tests right now.
+
+## License
+
+Apache License 2.0, see [LICENSE](LICENSE).
